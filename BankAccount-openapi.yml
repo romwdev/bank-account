@@ -1,0 +1,187 @@
+openapi: '3.0.2'
+info:
+  title: Bank Account
+  version: '1.0'
+servers:
+  - url: http://localhost:8080
+
+components:
+  schemas:
+    bank account:
+      description: a single bank account
+      type: object
+      properties:
+        account number:
+          type: string
+          description: the account identification number
+          example: 021100361
+        customer name:
+          type: string
+          description: the name of the customer
+          example: Zach Chun
+        bank company:
+          type: string
+          description:  the bank that manages this bank account
+          example: Chase
+        year:
+          type: integer
+          description: the year that the account was created
+          example: 2010
+        balance:
+          type: number
+          description: the amount of money present in this account
+          example: 9.99
+      required:
+        - account number
+        - customer name
+        - bank company
+        - year
+    account list:
+      description: List of bank accounts
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/bank account'
+    update account:
+      description: Updatable fields of a bank account
+      type: object
+      properties:
+        customer name:
+          type: string
+        balance:
+          type: number
+    error message:
+      type: object
+      properties:
+        message:
+          type: string
+
+paths:
+  /api/bank-account:
+    get:
+      tags:
+        - Bank Account
+      description: Search for accounts
+      operationId: searchAccounts
+      parameters:
+        - name: bank company
+          in: query
+          schema:
+            type: string
+          required: false
+        - name: year
+          in: query
+          schema:
+            type: integer
+          required: false
+      responses:
+        '200':
+          description: At least one account exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account list'
+        '204':
+          description: No accounts found
+
+    post:
+      tags:
+        - Bank Account
+      description: Add a bank account
+      operationId: addAccount
+      requestBody:
+        description: Bank account to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bank account'
+      responses:
+        '200':
+          description: Bank account added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bank account'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error message'
+  /api/bank-account/{account number}:
+    get:
+      tags:
+        - Bank Account
+      description: Find an bank account by its account number
+      operationId: findAccount
+      parameters:
+        - name: account number
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bank account'
+        '204':
+          description: Account not found
+    patch:
+      tags:
+        - Bank Account
+      description: Update customer name or balance of account
+      operationId: updateAccount
+      parameters:
+        - name: account number
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Details to be patched.  Only customer name and balance are updateable.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update account'
+      responses:
+        '200':
+          description: Account updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bank account'
+        '204':
+          description: Account not found
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error message'
+
+    delete:
+      tags:
+        - Bank Account
+      description: delete an account by its account number
+      operationId: deleteAccount
+      parameters:
+        - name: account number
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '202':
+          description: Account delete request accepted
+        '204':
+          description: Account not found
+
+
+
+
+

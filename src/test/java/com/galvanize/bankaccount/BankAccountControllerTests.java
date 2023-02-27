@@ -121,4 +121,17 @@ public class BankAccountControllerTests {
                 .andExpect(jsonPath("$.name").value(account.getName()))
                 .andExpect(jsonPath("$.balance").value(account.getBalance()));
     }
+
+    @Test
+    void patchRequestAccountNotFoundReturns204() throws Exception {
+        UpdateAccount update = new UpdateAccount("Bobert", 10.99);
+
+        when(bankAccountService.updateAccount(anyLong(), anyString(), anyDouble()))
+                .thenReturn(new BankAccount());
+
+        mockMvc.perform(patch(path + '/' + account.getAccountNumber())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(update)))
+                .andExpect(status().isNoContent());
+    }
 }

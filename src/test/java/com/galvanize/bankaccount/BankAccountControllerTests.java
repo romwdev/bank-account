@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BankAccountController.class)
@@ -51,5 +52,13 @@ public class BankAccountControllerTests {
                 .param("year", "2023"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accounts", hasSize(5)));
+    }
+
+    @Test
+    void getRequestNoAccountsFoundReturns204() throws Exception {
+        when(bankAccountService.getAccounts()).thenReturn(new AccountList());
+        mockMvc.perform(get(path))
+                .andDo(print())
+                .andExpect(status().isNoContent());
     }
 }

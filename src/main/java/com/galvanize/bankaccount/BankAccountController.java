@@ -1,9 +1,9 @@
 package com.galvanize.bankaccount;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bank-account")
@@ -15,11 +15,15 @@ public class BankAccountController {
     }
 
     @GetMapping()
-    public AccountList getAccounts(@RequestParam String company,
-                                   @RequestParam int year) {
-        if (company == null || year == 0) {
-            return bankAccountService.getAccounts();
+    public ResponseEntity<AccountList> getAccounts(@RequestParam(required = false) String company,
+                                                   @RequestParam(required = false) Integer year) {
+        AccountList accounts;
+        if (company == null && year == null) {
+            accounts = bankAccountService.getAccounts();
+        } else {
+            accounts = bankAccountService.getAccounts(company, year);
         }
-        return bankAccountService.getAccounts(company, year);
+        return accounts.isEmpty() ? ResponseEntity.noContent().build() :
+                ResponseEntity.ok(accounts);
     }
 }

@@ -47,6 +47,10 @@ public class BankAccountController {
     @PatchMapping("/{accountNumber}")
     public ResponseEntity<BankAccount> updateAccount(@PathVariable Long accountNumber,
                                      @RequestBody UpdateAccount update) {
+        if (update.getName() == null && update.getBalance() == null) {
+            throw new InvalidAccountException();
+        }
+
         BankAccount account = bankAccountService.updateAccount(accountNumber, update.getName(), update.getBalance());
 
         if (account.getAccountNumber() == null) {

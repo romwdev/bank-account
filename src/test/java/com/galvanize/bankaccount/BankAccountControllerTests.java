@@ -134,4 +134,15 @@ public class BankAccountControllerTests {
                         .content(mapper.writeValueAsString(update)))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void patchRequestBadContentReturns400() throws Exception {
+        when(bankAccountService.updateAccount(anyLong(), anyString(), anyDouble()))
+                .thenThrow(InvalidAccountException.class);
+
+        mockMvc.perform(patch(path + '/' + account.getAccountNumber())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"message\": \"string\"}"))
+                .andExpect(status().isBadRequest());
+    }
 }

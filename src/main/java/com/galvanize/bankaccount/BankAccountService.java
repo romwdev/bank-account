@@ -14,8 +14,17 @@ public class BankAccountService {
         return new AccountList(bankAccountRepository.findAll());
     }
 
-    public AccountList getAccounts(String company, int year) {
-        return new AccountList(bankAccountRepository.findByCompanyAndYear(company, year));
+    public AccountList getAccounts(String company, Integer year) {
+        AccountList accounts;
+        if (year == null) {
+            accounts = new AccountList(bankAccountRepository.findByCompany(company));
+        } else if (company == null) {
+            accounts = new AccountList(bankAccountRepository.findByYear(year));
+        } else {
+            accounts = new AccountList(bankAccountRepository.findByCompanyAndYear(company, year));
+        }
+
+        return accounts;
     }
 
     public BankAccount addAccount(BankAccount account) {

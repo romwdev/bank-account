@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
     public List<BankAccount> findByCompanyAndYear(String company, Integer year);
+    public List<BankAccount> findByCompany(String company);
+    public List<BankAccount> findByYear(Integer year);
 }

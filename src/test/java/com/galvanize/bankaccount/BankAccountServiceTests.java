@@ -42,4 +42,22 @@ public class BankAccountServiceTests {
         assertThat(accounts).isNotNull();
         assertThat(accounts.isEmpty()).isFalse();
     }
+
+    @Test
+    void getAccountsByCompanyReturnsList() {
+        when(bankAccountRepository.findByCompany(anyString()))
+                .thenReturn(Collections.singletonList(account));
+        AccountList accounts = bankAccountService.getAccounts("Discover", null);
+        assertThat(accounts).isNotNull();
+        assertThat(accounts.isEmpty()).isFalse();
+    }
+
+    @Test
+    void getAccountsByYearReturnsList() {
+        when(bankAccountRepository.findByYear(anyInt()))
+                .thenReturn(Collections.singletonList(account));
+        AccountList accounts = bankAccountService.getAccounts(null, 2011);
+        assertThat(accounts).isNotNull();
+        assertThat(accounts.isEmpty()).isFalse();
+    }
 }

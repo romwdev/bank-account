@@ -4,12 +4,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BankAccountService {
+    BankAccountRepository bankAccountRepository;
+
+    public BankAccountService(BankAccountRepository bankAccountRepository) {
+        this.bankAccountRepository = bankAccountRepository;
+    }
+
     public AccountList getAccounts() {
-        return null;
+        return new AccountList(bankAccountRepository.findAll());
     }
 
     public AccountList getAccounts(String company, int year) {
-        return null;
+        return new AccountList(bankAccountRepository.findByCompanyAndYear(company, year));
     }
 
     public BankAccount addAccount(BankAccount account) {

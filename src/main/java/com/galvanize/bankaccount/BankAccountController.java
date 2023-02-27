@@ -1,5 +1,6 @@
 package com.galvanize.bankaccount;
 
+import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,16 @@ public class BankAccountController {
         BankAccount account = bankAccountService.getAccount(accountNumber);
         return account.getAccountNumber() == null ? ResponseEntity.noContent().build() :
                 ResponseEntity.ok(account);
+    }
+
+    @PatchMapping("/{accountNumber}")
+    public BankAccount updateAccount(@PathVariable Long accountNumber,
+                                     @RequestBody UpdateAccount update) {
+        BankAccount account = bankAccountService.updateAccount(accountNumber, update.getName(), update.getBalance());
+        account.setName(update.getName());
+        account.setBalance(update.getBalance());
+
+        return account;
     }
 
     @ExceptionHandler

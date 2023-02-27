@@ -19,4 +19,8 @@ public class BankAccountService {
     public BankAccount getAccount(Long accountNumber) {
         return null;
     }
+
+    public BankAccount updateAccount(Long accountNumber, String name, Double balance) {
+        return null;
+    }
 }

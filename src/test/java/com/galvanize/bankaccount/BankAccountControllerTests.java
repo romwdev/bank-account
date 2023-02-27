@@ -1,6 +1,7 @@
 package com.galvanize.bankaccount;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -14,8 +15,7 @@ import java.util.List;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,12 +23,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BankAccountController.class)
 public class BankAccountControllerTests {
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
     @MockBean
-    BankAccountService bankAccountService;
+    private BankAccountService bankAccountService;
     private final ObjectMapper mapper = new ObjectMapper();
     private final String path = "/api/bank-account";
-    BankAccount account = new BankAccount(12345, "Robert Taylor", "USAA", 2023);
+    private BankAccount account;
+
+    @BeforeEach
+    void setUp() {
+        account = new BankAccount(12345, "Robert Taylor", "USAA", 2023);
+    }
 
     @Test
     void getRequestWithNoAccountNumberOrParamsReturnsList() throws Exception {
@@ -100,5 +105,20 @@ public class BankAccountControllerTests {
 
         mockMvc.perform(get(path + '/' + account.getAccountNumber()))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void patchRequestReturnsAccount() throws Exception {
+        UpdateAccount update = new UpdateAccount("Bobert", 10.99);
+
+        when(bankAccountService.updateAccount(anyLong(), anyString(), anyDouble()))
+                .thenReturn(account);
+
+        mockMvc.perform(patch(path + '/' + account.getAccountNumber())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(update)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(account.getName()))
+                .andExpect(jsonPath("$.balance").value(account.getBalance()));
     }
 }

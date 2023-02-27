@@ -14,8 +14,7 @@ import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -154,4 +153,10 @@ public class BankAccountControllerTests {
         verify(bankAccountService).deleteAccount(anyLong());
     }
 
+    @Test
+    void deleteRequestNotFoundReturns204() throws Exception {
+        doThrow(new AccountNotFoundException()).when(bankAccountService).deleteAccount(anyLong());
+        mockMvc.perform(delete(path + "/00000000"))
+                .andExpect(status().isNoContent());
+    }
 }

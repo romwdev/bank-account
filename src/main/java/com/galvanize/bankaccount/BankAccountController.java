@@ -4,8 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/bank-account")
 public class BankAccountController {
@@ -31,6 +29,14 @@ public class BankAccountController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public BankAccount addAccount(@RequestBody BankAccount account) {
+        if (account.getAccountNumber() == null || account.getName() == null ||
+                account.getCompany() == null || account.getYear() == null) {
+            throw new InvalidAccountException();
+        }
         return bankAccountService.addAccount(account);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void invalidAccountExceptionHandler(InvalidAccountException e) {}
 }

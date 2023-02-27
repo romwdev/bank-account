@@ -1,16 +1,16 @@
 package com.galvanize.bankaccount;
 
 public class BankAccount {
-    private long accountNumber;
+    private Long accountNumber;
     private String name;
     private String company;
-    private int year;
-    private double balance;
+    private Integer year;
+    private Double balance;
 
-    public long getAccountNumber() {
+    public Long getAccountNumber() {
         return accountNumber;
     }
-    public void setAccountNumber(long accountNumber) {
+    public void setAccountNumber(Long accountNumber) {
         this.accountNumber = accountNumber;
     }
     public String getName() {
@@ -25,16 +25,16 @@ public class BankAccount {
     public void setCompany(String company) {
         this.company = company;
     }
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
-    public double getBalance() {
+    public Double getBalance() {
         return balance;
     }
-    public void setBalance(double balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 

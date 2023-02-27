@@ -28,6 +28,7 @@ public class BankAccountControllerTests {
     BankAccountService bankAccountService;
     private final ObjectMapper mapper = new ObjectMapper();
     private final String path = "/api/bank-account";
+    BankAccount account = new BankAccount(12345, "Robert Taylor", "USAA", 2023);
 
     @Test
     void getRequestWithNoAccountNumberOrParamsReturnsList() throws Exception {
@@ -65,7 +66,6 @@ public class BankAccountControllerTests {
 
     @Test
     void postRequestReturnsAccount() throws Exception {
-        BankAccount account = new BankAccount(12345, "Robert Taylor", "USAA", 2023);
         when(bankAccountService.addAccount(any(BankAccount.class))).thenReturn(account);
 
         mockMvc.perform(post(path)
@@ -73,5 +73,15 @@ public class BankAccountControllerTests {
                 .content(mapper.writeValueAsString(account)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.accountNumber").value(12345));
+    }
+
+    @Test
+    void postRequestBadContentReturns400() throws Exception {
+        when(bankAccountService.addAccount(any(BankAccount.class))).thenThrow(InvalidAccountException.class);
+
+        mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(account)))
+                .andExpect(status().isBadRequest());
     }
 }

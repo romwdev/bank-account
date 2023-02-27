@@ -1,5 +1,6 @@
 package com.galvanize.bankaccount;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,5 +26,11 @@ public class BankAccountController {
         }
         return accounts.isEmpty() ? ResponseEntity.noContent().build() :
                 ResponseEntity.ok(accounts);
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public BankAccount addAccount(@RequestBody BankAccount account) {
+        return bankAccountService.addAccount(account);
     }
 }

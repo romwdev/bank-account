@@ -5,19 +5,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BankAccountController.class)
 public class BankAccountControllerTests {
@@ -60,5 +61,17 @@ public class BankAccountControllerTests {
         mockMvc.perform(get(path))
                 .andDo(print())
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void postRequestReturnsAccount() throws Exception {
+        BankAccount account = new BankAccount(12345, "Robert Taylor", "USAA", 2023);
+        when(bankAccountService.addAccount(any(BankAccount.class))).thenReturn(account);
+
+        mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(account)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.accountNumber").value(12345));
     }
 }

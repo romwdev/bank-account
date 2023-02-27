@@ -11,4 +11,8 @@ public class BankAccountService {
     public AccountList getAccounts(String company, int year) {
         return null;
     }
+
+    public BankAccount addAccount(BankAccount account) {
+        return null;
+    }
 }

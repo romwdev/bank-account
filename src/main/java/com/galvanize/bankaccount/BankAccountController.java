@@ -37,8 +37,10 @@ public class BankAccountController {
     }
 
     @GetMapping("/{accountNumber}")
-    public BankAccount getAccountByNumber(@PathVariable Long accountNumber) {
-        return bankAccountService.getAccount(accountNumber);
+    public ResponseEntity<BankAccount> getAccountByNumber(@PathVariable Long accountNumber) {
+        BankAccount account = bankAccountService.getAccount(accountNumber);
+        return account.getAccountNumber() == null ? ResponseEntity.noContent().build() :
+                ResponseEntity.ok(account);
     }
 
     @ExceptionHandler

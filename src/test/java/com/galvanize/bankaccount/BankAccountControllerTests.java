@@ -93,4 +93,12 @@ public class BankAccountControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accountNumber").value(account.getAccountNumber()));
     }
+
+    @Test
+    void getRequestWithAccountNumberNotFoundReturns204() throws Exception {
+        when(bankAccountService.getAccount(anyLong())).thenReturn(new BankAccount());
+
+        mockMvc.perform(get(path + '/' + account.getAccountNumber()))
+                .andExpect(status().isNoContent());
+    }
 }

@@ -23,4 +23,8 @@ public class BankAccountService {
     public BankAccount updateAccount(Long accountNumber, String name, Double balance) {
         return null;
     }
+
+    public void deleteAccount(Long accountNumber) {
+
+    }
 }

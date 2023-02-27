@@ -62,6 +62,16 @@ public class BankAccountController {
         return ResponseEntity.ok(account);
     }
 
+    @DeleteMapping("/{accountNumber}")
+    public ResponseEntity removeAccount(@PathVariable Long accountNumber) {
+        try {
+            bankAccountService.deleteAccount(accountNumber);
+        } catch (AccountNotFoundException e) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.accepted().build();
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void invalidAccountExceptionHandler(InvalidAccountException e) {}

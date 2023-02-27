@@ -7,4 +7,8 @@ public class BankAccountService {
     public AccountList getAccounts() {
         return null;
     }
+
+    public AccountList getAccounts(String company, int year) {
+        return null;
+    }
 }

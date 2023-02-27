@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -32,6 +35,20 @@ public class BankAccountControllerTests {
         }
         when(bankAccountService.getAccounts()).thenReturn(new AccountList(bankAccounts));
         mockMvc.perform(get(path))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accounts", hasSize(5)));
+    }
+
+    @Test
+    void getRequestWithParamsReturnsList() throws Exception {
+        List<BankAccount> bankAccounts = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            bankAccounts.add(new BankAccount(11111 + i, "John Doe", "Wells Fargo", 2023));
+        }
+        when(bankAccountService.getAccounts(anyString(), anyInt())).thenReturn(new AccountList(bankAccounts));
+        mockMvc.perform(get(path)
+                .param("company", "Wells Fargo")
+                .param("year", "2023"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accounts", hasSize(5)));
     }

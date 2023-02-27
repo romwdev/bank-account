@@ -84,4 +84,13 @@ public class BankAccountControllerTests {
                 .content(mapper.writeValueAsString(account)))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void getRequestWithAccountNumberReturnsAccount() throws Exception {
+        when(bankAccountService.getAccount(anyLong())).thenReturn(account);
+
+        mockMvc.perform(get(path + '/' + account.getAccountNumber()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accountNumber").value(account.getAccountNumber()));
+    }
 }

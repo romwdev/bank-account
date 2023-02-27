@@ -15,4 +15,8 @@ public class BankAccountService {
     public BankAccount addAccount(BankAccount account) {
         return null;
     }
+
+    public BankAccount getAccount(Long accountNumber) {
+        return null;
+    }
 }

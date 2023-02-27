@@ -36,6 +36,11 @@ public class BankAccountController {
         return bankAccountService.addAccount(account);
     }
 
+    @GetMapping("/{accountNumber}")
+    public BankAccount getAccountByNumber(@PathVariable Long accountNumber) {
+        return bankAccountService.getAccount(accountNumber);
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void invalidAccountExceptionHandler(InvalidAccountException e) {}

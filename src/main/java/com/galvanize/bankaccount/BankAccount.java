@@ -1,9 +1,21 @@
 package com.galvanize.bankaccount;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "accounts")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BankAccount {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(name = "account_number")
     private Long accountNumber;
     private String name;
     private String company;
+    @Column(name = "year_opened")
     private Integer year;
     private Double balance;
 
@@ -38,7 +50,18 @@ public class BankAccount {
         this.balance = balance;
     }
 
-    public BankAccount(long accountNumber, String name, String company, int year) {
+    public String toString() {
+        return "BankAccount{" +
+                "accountNumber=" + accountNumber +
+                ", name=" + name + '\'' +
+                ", company=" + company + '\'' +
+                ", year=" + year + '\'' +
+                ", balance=" + balance + '\'' +
+                "}";
+    }
+
+
+    public BankAccount(Long accountNumber, String name, String company, Integer year) {
         this.accountNumber = accountNumber;
         this.name = name;
         this.company = company;

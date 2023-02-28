@@ -43,8 +43,15 @@ public class BankAccountService {
         if (account.isEmpty()) {
             return new BankAccount();
         }
-        account.get().setName(name);
-        account.get().setBalance(balance);
+        if (balance == null) {
+            account.get().setName(name);
+        } else if (name == null) {
+            account.get().setBalance(balance);
+        } else {
+            account.get().setName(name);
+            account.get().setBalance(balance);
+        }
+
         return bankAccountRepository.save(account.get());
     }
 

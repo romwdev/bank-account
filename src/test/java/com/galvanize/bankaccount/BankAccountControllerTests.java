@@ -32,14 +32,14 @@ public class BankAccountControllerTests {
 
     @BeforeEach
     void setUp() {
-        account = new BankAccount(12345, "Robert Taylor", "USAA", 2023);
+        account = new BankAccount(12345L, "Robert Taylor", "USAA", 2023);
     }
 
     @Test
     void getRequestWithNoAccountNumberOrParamsReturnsList() throws Exception {
         List<BankAccount> bankAccounts = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            bankAccounts.add(new BankAccount(11111 + i, "John Doe", "Wells Fargo", 2023));
+            bankAccounts.add(new BankAccount(11111L + i, "John Doe", "Wells Fargo", 2023));
         }
         when(bankAccountService.getAccounts()).thenReturn(new AccountList(bankAccounts));
         mockMvc.perform(get(path))
@@ -51,7 +51,7 @@ public class BankAccountControllerTests {
     void getRequestWithParamsReturnsList() throws Exception {
         List<BankAccount> bankAccounts = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            bankAccounts.add(new BankAccount(11111 + i, "John Doe", "Wells Fargo", 2023));
+            bankAccounts.add(new BankAccount(11111L + i, "John Doe", "Wells Fargo", 2023));
         }
         when(bankAccountService.getAccounts(anyString(), anyInt())).thenReturn(new AccountList(bankAccounts));
         mockMvc.perform(get(path)

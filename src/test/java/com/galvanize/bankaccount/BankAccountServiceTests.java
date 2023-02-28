@@ -25,7 +25,7 @@ public class BankAccountServiceTests {
     @BeforeEach
     void setUp() {
         bankAccountService = new BankAccountService(bankAccountRepository);
-        account = new BankAccount(12345, "Robert Taylor", "Discover", 2011);
+        account = new BankAccount(12345L, "Robert Taylor", "Discover", 2011);
     }
 
     @Test

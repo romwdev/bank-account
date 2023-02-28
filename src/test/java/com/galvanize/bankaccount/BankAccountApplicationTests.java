@@ -55,11 +55,6 @@ class BankAccountApplicationTests {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().isEmpty()).isFalse();
-
-		// TODO: DELETE THIS
-		for (BankAccount account : response.getBody().getAccounts()) {
-			System.out.println(account);
-		}
 	}
 
 	@Test
@@ -74,11 +69,6 @@ class BankAccountApplicationTests {
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().isEmpty()).isFalse();
 		assertThat(response.getBody().getAccounts().size()).isGreaterThanOrEqualTo(1);
-
-		// TODO: DELETE THIS
-		for (BankAccount account : response.getBody().getAccounts()) {
-			System.out.println(account);
-		}
 	}
 
 	@Test
